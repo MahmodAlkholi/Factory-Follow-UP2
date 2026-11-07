@@ -25,6 +25,7 @@ export const translations = {
     navInventory: "Inventory & Stock",
     navReports: "Reports & Export",
     navDataEntry: "Shop Floor Entry",
+    navCatalog: "Story Catalog",
     navDjangoExplorer: "Django 5 Architecture",
 
     // Global Filters
@@ -162,6 +163,7 @@ export const translations = {
     navInventory: "المخزون والحركات",
     navReports: "التقارير والتصدير",
     navDataEntry: "تسجيل بيانات الوردية",
+    navCatalog: "كتالوج القصة والعرض",
     navDjangoExplorer: "معمارية جانغو 5",
 
     // Global Filters

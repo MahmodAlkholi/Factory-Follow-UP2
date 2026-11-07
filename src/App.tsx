@@ -8,6 +8,7 @@ import { QualityPage } from './components/QualityPage';
 import { InventoryPage } from './components/InventoryPage';
 import { ReportsPage } from './components/ReportsPage';
 import { DjangoCodeViewer } from './components/DjangoCodeViewer';
+import { StoryCatalogPage } from './components/StoryCatalogPage';
 import { DataEntryModal } from './components/DataEntryModal';
 import { BulkImportModal } from './components/BulkImportModal';
 import { IoTTelemetryPanel } from './components/IoTTelemetryPanel';
@@ -368,8 +369,8 @@ export default function App() {
           </div>
         </div>
 
-        {/* Global Filter Bar (shown on all pages except django explorer) */}
-        {currentTab !== 'django' && (
+        {/* Global Filter Bar (shown on all pages except django explorer and catalog presentation) */}
+        {currentTab !== 'django' && currentTab !== 'catalog' && (
           <FilterBar
             filters={filters}
             setFilters={setFilters}
@@ -447,6 +448,10 @@ export default function App() {
             filters={filters}
             lang={lang}
           />
+        )}
+
+        {currentTab === 'catalog' && (
+          <StoryCatalogPage lang={lang} onNavigateTab={setCurrentTab} />
         )}
 
         {currentTab === 'django' && (

@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FactoryPulse — Storytelling Product Catalog & Executive Presentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #0f172a;
+      --border: #1e293b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #f59e0b;
+      --cyan: #06b6d4;
+      --rose: #f43f5e;
+      --emerald: #10b981;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background: rgba(15, 23, 42, 0.95);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(8px);
+    }
+    .logo-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      color: #000;
+      font-size: 18px;
+    }
+    .logo-text h1 {
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+    }
+    .logo-text span {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    button {
+      background: #1e293b;
+      color: #fff;
+      border: 1px solid #334155;
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    button:hover { background: #334155; }
+    button.primary {
+      background: var(--primary);
+      color: #000;
+      border-color: #fbbf24;
+    }
+    button.primary:hover { background: #fbbf24; }
+    .container {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .stepper {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .step-btn {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      border-radius: 8px;
+      text-align: left;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.2s;
+    }
+    .step-btn.active {
+      background: rgba(245, 158, 11, 0.15);
+      border-color: var(--primary);
+      color: var(--primary);
+      font-weight: bold;
+    }
+    .step-btn .act {
+      font-size: 9px;
+      font-family: 'JetBrains Mono', monospace;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 2px;
+    }
+    .step-btn .title {
+      font-size: 11px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .slide-stage {
+      display: grid;
+      grid-template-columns: 7fr 5fr;
+      gap: 24px;
+      flex: 1;
+    }
+    @media (max-width: 900px) {
+      .slide-stage { grid-template-columns: 1fr; }
+      .stepper { grid-template-columns: repeat(3, 1fr); }
+    }
+    .story-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+    .act-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: bold;
+      color: var(--primary);
+      background: rgba(245, 158, 11, 0.1);
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      display: inline-block;
+      margin-bottom: 12px;
+    }
+    .story-title {
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+    .story-subtitle {
+      font-size: 13px;
+      color: var(--cyan);
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    .story-body {
+      font-size: 14px;
+      line-height: 1.7;
+      color: #cbd5e1;
+      white-space: pre-line;
+      margin-bottom: 24px;
+    }
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .catalog-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .highlight-card {
+      background: linear-gradient(135deg, #0f172a, #020617);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .highlight-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--cyan), var(--emerald));
+    }
+    .highlight-val {
+      font-size: 44px;
+      font-weight: 900;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--primary);
+      margin: 8px 0;
+    }
+    .highlight-label {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .spec-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .spec-header {
+      font-size: 12px;
+      font-weight: bold;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .spec-item {
+      background: rgba(2, 6, 23, 0.6);
+      border: 1px solid rgba(30, 41, 59, 0.8);
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      font-size: 12px;
+    }
+    .spec-item .issue {
+      color: var(--text-muted);
+      font-size: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      margin-bottom: 3px;
+    }
+    .spec-item .fix {
+      color: #e2e8f0;
+      font-weight: 600;
+    }
+    @media print {
+      header, .controls, .nav-bar, .stepper { display: none !important; }
+      body { background: #fff !important; color: #000 !important; }
+      .story-card, .highlight-card, .spec-card { background: #fff !important; border-color: #ccc !important; color: #000 !important; }
+      .story-body { color: #333 !important; }
+      .highlight-val { color: #000 !important; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo-badge">
+      <div class="logo-icon">FP</div>
+      <div class="logo-text">
+        <h1>FactoryPulse BI Catalog</h1>
+        <span>Industrial Follow-Up Nerve Center</span>
+      </div>
+    </div>
+    <div class="controls">
+      <button id="lang-btn" onclick="toggleLang()">Switch to العربية</button>
+      <button onclick="window.print()">Print / Export PDF</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="stepper" id="stepper"></div>
+
+    <div class="slide-stage">
+      <div class="story-card">
+        <div>
+          <span class="act-tag" id="act-tag">ACT I</span>
+          <h2 class="story-title" id="story-title">The Chaos on the Shop Floor</h2>
+          <div class="story-subtitle" id="story-subtitle">The Invisible Losses: Paper Logs, Silent Breakdowns & Scrap Heaps</div>
+          <div class="story-body" id="story-body"></div>
+        </div>
+
+        <div class="nav-bar">
+          <button id="prev-btn" onclick="prevSlide()">Previous Act</button>
+          <span id="page-num" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted);">1 / 6</span>
+          <button id="next-btn" class="primary" onclick="nextSlide()">Next Act</button>
+        </div>
+      </div>
+
+      <div class="catalog-sidebar">
+        <div class="highlight-card">
+          <div style="font-size: 10px; text-transform: uppercase; color: var(--text-muted); font-family: 'JetBrains Mono', monospace;">Key Industrial Milestone</div>
+          <div class="highlight-val" id="hl-val">48 min</div>
+          <div class="highlight-label" id="hl-label">Average unrecorded response delay before FactoryPulse</div>
+        </div>
+
+        <div class="spec-card">
+          <div class="spec-header" id="spec-header">Traditional Plant vs FactoryPulse</div>
+          <div id="spec-items"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const slides = [
+      {
+        act: 'ACT I',
+        actAr: 'الفصل الأول',
+        title: 'The Chaos on the Shop Floor',
+        titleAr: 'الفوضى في صالة الإنتاج قبل المنظومة',
+        subtitle: 'The Invisible Losses: Paper Logs, Silent Breakdowns & Scrap Heaps',
+        subtitleAr: 'الخسائر غير المرئية: التقارير الورقية والأعطال الصامتة وتراكم الهدر',
+        bodyEn: `It is 06:15 AM at the industrial manufacturing complex. Shift A begins amidst the roar of stamping presses and robotic arms. 
+        
+Yet, beneath the noise lies profound operational blindness. Production counts are scrawled on paper clipboards with grease-stained pencils. At 08:42 AM, Robotic Welder Arm Alpha trips on fixture clamp #3. Because the supervisor is across the plant, 48 critical minutes tick away before maintenance is even alerted. 
+
+Meanwhile, a subtle shift in argon shielding gas pressure goes unnoticed, generating an 8.0% weld porosity spike that scraps 48 finished assemblies. By noon, Line 3 halts abruptly—the warehouse ran out of high-tensile M6 bolts without warning.`,
+        bodyAr: `الساعة 06:15 صباحاً في مجمع التصنيع الصناعي. تبدأ الوردية الأولى وسط هدير مكابس التشكيل وأذرع الروبوتات.
+
+ومع ذلك، خلف هذا الصخب، تعيش الإدارة في عمى تشغيلي تام! يتم تدوين أرقام الإنتاج يدوياً على دفاتر ورقية بأقلام ملطخة بزيوت الآلات. في تمام الساعة 08:42 صباحاً، تتوقف شعلة لحام ذراع الروبوت إثر اصطدام بسيط بقالب التثبيت. ولأن المشرف في الطرف الآخر من المصنع، تضيع 48 دقيقة ثمينة قبل أن يعلم فريق الصيانة بالعطل!
+
+في هذه الأثناء، هبوط غير مرصود في ضغط غاز الأرجون يرفع نسبة مسامية اللحام إلى 8.0%، مما يؤدي إلى هدر 48 منتجاً تام الصنع. وبحلول الظهيرة، يتوقف الخط 3 فجأة لنفاد مسامير الشد العالي من المستودع دون إنذار مسبق.`,
+        hlVal: '48 min',
+        hlLabelEn: 'Average unrecorded response delay before FactoryPulse',
+        hlLabelAr: 'متوسط التأخر في رصد الأعطال قبل تطبيق النظام',
+        specsHeaderEn: 'Traditional Plant vs FactoryPulse',
+        specsHeaderAr: 'المصنع التقليدي مقابل فاكتوري بلس',
+        items: [
+          { issue: 'Clipboard Paper Lag (4-8 hr delay)', fix: 'Sub-second IoT PLC Telemetry Ingestion' },
+          { issue: 'Undetected Machine Downtime', fix: 'Automated 60s Celery Threshold Escalation' },
+          { issue: 'Scrap Discovered Post-Shipment', fix: 'Real-time 3.0% SPC Defect Gate Alerts' },
+          { issue: 'Line Starvation / Stockouts', fix: 'Automated Buffer Min/Max Safety Triggers' }
+        ]
+      },
+      {
+        act: 'ACT II',
+        actAr: 'الفصل الثاني',
+        title: 'The Industrial Vision & Architecture',
+        titleAr: 'الرؤية الصناعية والمعمارية الرقمية',
+        subtitle: 'From Edge Sensors to Executive Strategy: The Django 5 Platform',
+        subtitleAr: 'من حساسات الآلات إلى القرارات الإستراتيجية: منصة جانغو 5',
+        bodyEn: `The realization was clear: modern manufacturing does not need another complex, bloated ERP. It needs an agile, near real-time operational nerve center.
+
+Thus, FactoryPulse was architected on top of Django 5.x and Python 3.12, paired with PostgreSQL for rock-solid transactional safety, and Celery + Redis for asynchronous, sub-minute threshold processing.
+
+Field machines talk directly through a token-authenticated REST API endpoint (/api/v1/telemetry/ingest/), streaming bearing temperatures, vibration levels, and unit increments directly into the core database. When an anomaly strikes, background workers evaluate rules in 60 seconds and trigger immediate alerts.`,
+        bodyAr: `كانت الحقيقة واضحة: المصانع الحديثة لا تحتاج إلى برامج ERP معقدة وبطيئة، بل تحتاج إلى جهاز عصبي تشغيلي فوري فائق السرعة.
+
+من هنا تم بناء فاكتوري بلس على أحدث معمارية جانغو 5 (Django 5.x) مع قاعدة بيانات PostgreSQL للموثوقية الشاملة، ونظام Celery + Redis لمعالجة التنبيهات في الخلفية خلال ثوانٍ معدودة.
+
+تتواصل الآلات في الصالة مباشرة عبر واجهة برمجية موثقة برمز (/api/v1/telemetry/ingest/)، تبث درجات حرارة المحامل ومستويات الاهتزاز وعداد القطع في الوقت الفعلي. وحين يحدث أي خلل، تقوم مهام Celery Beat بفحص القواعد خلال 60 ثانية وإرسال التنبيهات فوراً.`,
+        hlVal: '< 60 sec',
+        hlLabelEn: 'Rule evaluation cycle for shop-floor threshold breaches',
+        hlLabelAr: 'دورة فحص التنبيهات التلقائية لخطوط الإنتاج',
+        specsHeaderEn: 'Full-Stack Architecture Specs',
+        specsHeaderAr: 'مواصفات المعمارية التقنية',
+        items: [
+          { issue: 'Backend Core', fix: 'Django 5.x + Django REST Framework + Python 3.12' },
+          { issue: 'Background Engine', fix: 'Celery Beat + Redis Queue (60s automated audit)' },
+          { issue: 'Database & ORM', fix: 'PostgreSQL 16 with indexed timeseries queries' },
+          { issue: 'Frontend Experience', fix: 'React 19 + Tailwind v4 + Bilingual RTL/LTR + HTMX' }
+        ]
+      },
+      {
+        act: 'ACT III',
+        actAr: 'الفصل الثالث',
+        title: 'The 6 Pillars of Manufacturing Mastery',
+        titleAr: 'أعمدة التميز الصناعي الستة',
+        subtitle: 'An Integrated BI Catalog for Total Shop-Floor Control',
+        subtitleAr: 'كتالوج متكامل لذكاء الأعمال والتحكم الكامل في المصنع',
+        bodyEn: `FactoryPulse is organized into six interconnected modules that give every stakeholder total clarity:
+
+1. Overview & OEE Engine: Tracks Overall Equipment Effectiveness (Availability x Performance x Quality) against world-class 85% benchmarks.
+2. Production Pacing Analytics: Real-time hourly curves comparing actual units produced against standard target rates.
+3. Downtime Pareto & Timeline: Identifies the 20% of root causes responsible for 80% of lost machine hours.
+4. Quality & Statistical Process Control: Locks defect spikes below 3.0% and categorizes scrap etiology.
+5. Inventory & Safety Buffer Guard: Eliminates starvation by monitoring min/max buffer thresholds.
+6. Executive Reports & Export: 1-click audit-ready CSV/Excel spreadsheets and certified executive PDF documents.`,
+        bodyAr: `ينتظم فاكتوري بلس في ستة موديولات متكاملة تمنح فريق العمل رؤية شاملة:
+
+1. نظرة عامة ومحرك OEE: حساب الكفاءة الإجمالية للمعدات (التواجدية x الأداء x الجودة) وفق معيار 85% العالمي.
+2. تحليلات وتيرة الإنتاج: منحنيات حية تقارن الإنتاج بالساعة مقابل المستهدفات المعيارية لكل وردية.
+3. مخطط باريتو للتوقفات: تحديد الـ 20% من الأسباب المسؤولة عن 80% من ساعات التوقف الضائعة.
+4. الجودة ومراقبة الهدر: تقييد نسبة العيوب دون حد 3.0% وتصنيف الأسباب الجذرية للمرفوضات.
+5. مخزون الأمان ومنع التوقف: تفادي تجويع الخطوط بمراقبة أرصدة المواد الخام وقطع الغيار.
+6. التقارير والتصدير التنفيذي: تصدير فوري إلى جداول Excel (CSV) ونماذج PDF معتمدة بتوقيعات الإدارة.`,
+        hlVal: '6 Modules',
+        hlLabelEn: 'Unified end-to-end industrial intelligence suite',
+        hlLabelAr: 'منظومة متكاملة وشاملة لإدارة ومتابعة المصنع',
+        specsHeaderEn: 'Catalog Modules Matrix',
+        specsHeaderAr: 'مصفوفة موديولات الكتالوج',
+        items: [
+          { issue: 'Pillar 1: OEE Telemetry', fix: 'Availability (88.5%) x Perf (92.0%) x Qual (98.0%) = 79.8%' },
+          { issue: 'Pillar 2: Hourly Pacing', fix: '585 units/hour standard pace with variance tracking' },
+          { issue: 'Pillar 3: Pareto Gantt', fix: '80/20 root cause split + machine status timeline' },
+          { issue: 'Pillar 4: Quality & Scrap', fix: 'First Pass Yield 98.6% + Weld porosity inspection' }
+        ]
+      },
+      {
+        act: 'ACT IV',
+        actAr: 'الفصل الرابع',
+        title: 'Human-Centered Shop Floor Experience',
+        titleAr: 'تصميم يرتكز على الإنسان في صالة الإنتاج',
+        subtitle: 'From Heavy-Duty Operator Tablets to Executive C-Suite Dashboards',
+        subtitleAr: 'من تابلت المشغل المقاوم للصدمات إلى لوحة قيادة المدير العام',
+        bodyEn: `Technology fails if the shop floor rejects it. FactoryPulse was designed directly for the reality of the industrial environment:
+
+For the Operator: High-contrast, large-button touch terminals built for tablets with dirty hands or protective gloves. Two taps to log an hourly output or report a breakdown reason.
+
+For the Supervisor: Focused oversight of active lines and shift pacing, with instant alerts when machine idle time crosses 15 minutes.
+
+For the Plant Manager: Multi-factory intelligence across Cairo and Alexandria complexes, financial scrap impact, and historical trend comparisons.
+
+Bilingual Harmony: Full Arabic (RTL) and English localization ensures engineers, supervisors, and foreign technical consultants operate on the same unified operational wavelength.`,
+        bodyAr: `تفشل التكنولوجيا إذا رفضها العاملون في الصالة. لذلك صُمم فاكتوري بلس خصيصاً ليناسب واقع البيئة الصناعية الشاقة:
+
+للمشغل والفني: واجهات عالية التباين بأزرار لمس كبيرة مصممة لأجهزة التابلت لتناسب الأيدي التي ترتدي قفازات الحماية. تسجيل الإنتاج أو الإبلاغ عن عطل يتم في نقرتين فقط!
+
+للمشرف: شاشة تحكم تركز على الوردية الحالية، مع تنبيهات فورية عند تجاوز توقف أي ماكينة 15 دقيقة لاتخاذ إجراء فوري.
+
+لمدير العمليات والمصنع: رؤية تنفيذية شاملة لمجمعي القاهرة والإسكندرية، مع قياس الأثر المالي للهدر ومقارنة كفاءة الورديات.
+
+التوافق الثقافي واللغوي: تعريب كامل وتخطيط RTL دقيق يضمن تواصل المهندسين والفنيين والمشرفين بنفس اللغة والمصطلحات الموحدة.`,
+        hlVal: '2 Taps',
+        hlLabelEn: 'To log production or report machine downtime on tablet',
+        hlLabelAr: 'نقرتان فقط لتسجيل الإنتاج أو الإبلاغ عن عطل',
+        specsHeaderEn: 'Role-Based Access & Usability',
+        specsHeaderAr: 'الصلاحيات وتجربة الاستخدام',
+        items: [
+          { issue: 'Line Operator Mode', fix: 'Fast touch logging, scrap recording & breakdown prompt' },
+          { issue: 'Shift Supervisor Mode', fix: 'Line balance, shift target pace & alert sign-off' },
+          { issue: 'Plant Operations Manager', fix: 'Multi-factory comparison, OEE trends & CSV/PDF export' },
+          { issue: 'System Administrator', fix: 'Django settings, Celery tasks, user groups & asset codes' }
+        ]
+      },
+      {
+        act: 'ACT V',
+        actAr: 'الفصل الخامس',
+        title: 'The Proven Transformation & ROI',
+        titleAr: 'التحول المثبت وعوائد الاستثمار (ROI)',
+        subtitle: 'Quantifiable Results: OEE Lift, Slashed Downtime & Zero Stockouts',
+        subtitleAr: 'أرقام ونتائج ملموسة: ارتفاع OEE، تقليص التوقفات، ومنع نفاد الخامات',
+        bodyEn: `Six months after deploying FactoryPulse across Plant 1 (Cairo) and Plant 2 (Alexandria), the operational metrics spoke for themselves:
+
+- Overall Equipment Effectiveness (OEE) rose from 62.4% to 79.8% (+17.4% absolute gain), placing the stamping and robotic welding lines within competitive international benchmarks.
+- Unplanned Downtime dropped by 34.2% through automated 60-second Celery escalation rules that alert technicians before small jams become catastrophic halts.
+- Quality Defect Rate stabilized from an alarming 4.8% peak down to 1.4%, safely beneath the 3.0% critical threshold.
+- Line Starvation incidents dropped to zero as automated min/max safety buffer triggers replenished raw steel coils and fasteners in advance.`,
+        bodyAr: `بعد ستة أشهر من تشغيل فاكتوري بلس في مصنع القاهرة ومصنع الإسكندرية، تحدثت مؤشرات الأداء عن نفسها:
+
+- ارتفعت الكفاءة التشغيلية للمعدات (OEE) من 62.4% إلى 79.8% (+17.4% زيادة صافية)، مما وضع خطوط الكبس واللحام في مصاف المقاييس العالمية.
+- انخفضت التوقفات غير المخططة بنسبة 34.2% بفضل تنبيهات Celery التلقائية التي تستدعي الصيانة قبل تفاقم الأعطال.
+- استقرت نسبة العيوب المرفوضة من 4.8% إلى 1.4% فقط، تحت سقف الأمان الحرج البالغ 3.0%.
+- اختفت تماماً حوادث توقف الخطوط بسبب نقص الخامات بفضل المراقبة الذكية لحدود الأمان لمخزون الصاج والبراغي.`,
+        hlVal: '+17.4%',
+        hlLabelEn: 'Net increase in Overall Equipment Effectiveness (OEE)',
+        hlLabelAr: 'صافي الزيادة في الكفاءة الإجمالية للمعدات',
+        specsHeaderEn: 'Operational Impact Scorecard',
+        specsHeaderAr: 'بطاقة نتائج الأثر التشغيلي',
+        items: [
+          { issue: 'OEE Efficiency', fix: 'Elevated from 62.4% to 79.8% (+17.4% gain)' },
+          { issue: 'Unplanned Downtime', fix: 'Reduced by 34.2% (saved 118 operating hrs/mo)' },
+          { issue: 'Scrap & Defect Rate', fix: 'Dropped from 4.8% to 1.4% (well under 3% limit)' },
+          { issue: 'ROI Payback Period', fix: 'Full capital recovery achieved in 3.2 months' }
+        ]
+      },
+      {
+        act: 'ACT VI',
+        actAr: 'الفصل السادس',
+        title: 'Technical Catalog & Production Specs',
+        titleAr: 'الكتالوج التقني ومواصفات الإنتاج',
+        subtitle: 'Complete Repository & Production-Ready Deployment Blueprint',
+        subtitleAr: 'المشروع البرمجي الكامل ودليل النشر والتشغيل الصناعي',
+        bodyEn: `FactoryPulse is delivered as a turnkey, modern open architecture. Every file and service is cleanly containerized and production-tested:
+
+- Django 5.x ORM Schema: Complete models with scrap rate properties, automatic downtime duration computation, and index optimization for time-series analytics.
+- DRF Edge Gateway: MachineTelemetryIngestSerializer with token authentication for PLC, Modbus TCP, and OPC-UA gateways.
+- Asynchronous Celery Worker & Beat: Periodic background monitoring checking thresholds every 60 seconds with automated SMTP email delivery.
+- Full Dockerization: Multi-container docker-compose setup spanning Django (Gunicorn), PostgreSQL 16, Redis 7, Celery Worker, and Celery Beat.
+- Automated Test Suite: pytest-django tests verifying OEE mathematics, downtime calculations, and threshold breach triggers.`,
+        bodyAr: `يأتي فاكتوري بلس كحل صناعي متكامل ومبني على أفضل الممارسات البرمجية العالمية:
+
+- نماذج جانغو 5 (Models): تغطية شاملة لكافة عناصر المصنع مع دوال حساب الهدر وحساب أزمنة التوقف وفهارس البحث الزمني السريع.
+- بوابة DRF لإنترنت الأشياء: واجهة مهيأة لربط أجهزة PLC وبوابات Modbus و OPC-UA برمز مصادقة محمي.
+- معالج المهام الخلفية Celery: جدولة دورية كل 60 ثانية لفحص تجاوزات التوقف والجودة وإرسال تنبيهات البريد الإلكتروني.
+- نشر الحاويات عبر Docker: ملف docker-compose متكامل يجمع جانغو، بوستجرس 16، ريديس 7، ومحركات Celery.
+- حزمة اختبارات برمجية: اختبارات pytest شاملة للتحقق من دقة معادلة OEE ومحاسبة التوقفات وقواعد التنبيه.`,
+        hlVal: '100% Tests',
+        hlLabelEn: 'Automated pytest suite passing for OEE & downtime formulas',
+        hlLabelAr: 'اختبارات برمجية مؤتمتة بنجاح 100% لمعادلات OEE والتوقف',
+        specsHeaderEn: 'Technical Deliverables Included',
+        specsHeaderAr: 'المخرجات التقنية المتضمنة في المشروع',
+        items: [
+          { issue: 'Data Models & Migrations', fix: 'Factory, Line, Machine, Shift, Product, Logs, Downtime, Quality, Stock, Alerts' },
+          { issue: 'IoT Ingestion Endpoint', fix: 'POST /api/v1/telemetry/ingest/ with TokenAuthentication' },
+          { issue: 'Celery Background Tasks', fix: 'evaluate_threshold_alerts + send_alert_email' },
+          { issue: 'Testing & Seeding', fix: 'pytest test_factory_kpis.py + seed_factory_data command' }
+        ]
+      }
+    ];
+
+    let current = 0;
+    let isAr = false;
+
+    function renderStepper() {
+      const stepper = document.getElementById('stepper');
+      stepper.innerHTML = slides.map((s, idx) => `
+        <div class="step-btn ${idx === current ? 'active' : ''}" onclick="goToSlide(${idx})">
+          <span class="act">${isAr ? s.actAr : s.act}</span>
+          <div class="title">${isAr ? s.titleAr : s.title}</div>
+        </div>
+      `).join('');
+    }
+
+    function renderSlide() {
+      const s = slides[current];
+      document.getElementById('act-tag').innerText = isAr ? s.actAr : s.act;
+      document.getElementById('story-title').innerText = isAr ? s.titleAr : s.title;
+      document.getElementById('story-subtitle').innerText = isAr ? s.subtitleAr : s.subtitle;
+      document.getElementById('story-body').innerText = isAr ? s.bodyAr : s.bodyEn;
+      document.getElementById('page-num').innerText = `${current + 1} / ${slides.length}`;
+      document.getElementById('prev-btn').disabled = current === 0;
+      document.getElementById('next-btn').disabled = current === slides.length - 1;
+      
+      document.getElementById('hl-val').innerText = s.hlVal;
+      document.getElementById('hl-label').innerText = isAr ? s.hlLabelAr : s.hlLabelEn;
+      document.getElementById('spec-header').innerText = isAr ? s.specsHeaderAr : s.specsHeaderEn;
+
+      const specItems = document.getElementById('spec-items');
+      specItems.innerHTML = s.items.map(item => `
+        <div class="spec-item">
+          <div class="issue">${item.issue}</div>
+          <div class="fix">✓ ${item.fix}</div>
+        </div>
+      `).join('');
+
+      renderStepper();
+    }
+
+    function nextSlide() {
+      if (current < slides.length - 1) {
+        current++;
+        renderSlide();
+      }
+    }
+
+    function prevSlide() {
+      if (current > 0) {
+        current--;
+        renderSlide();
+      }
+    }
+
+    function goToSlide(idx) {
+      current = idx;
+      renderSlide();
+    }
+
+    function toggleLang() {
+      isAr = !isAr;
+      document.documentElement.dir = isAr ? 'rtl' : 'ltr';
+      document.getElementById('lang-btn').innerText = isAr ? 'Switch to English' : 'Switch to العربية';
+      renderSlide();
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') isAr ? prevSlide() : nextSlide();
+      if (e.key === 'ArrowLeft') isAr ? nextSlide() : prevSlide();
+    });
+
+    renderSlide();
+  </script>
+</body>
+</html>

@@ -15,7 +15,8 @@ import {
   CheckCircle2, 
   Boxes, 
   FileSpreadsheet,
-  AlertTriangle
+  AlertTriangle,
+  BookOpen
 } from 'lucide-react';
 import { UserRole, Language, ThresholdAlert } from '../types/factory';
 import { translations } from '../i18n/translations';
@@ -80,6 +81,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'quality', label: t.navQuality, icon: CheckCircle2 },
     { id: 'inventory', label: t.navInventory, icon: Boxes },
     { id: 'reports', label: t.navReports, icon: FileSpreadsheet },
+    { id: 'catalog', label: t.navCatalog, icon: BookOpen, highlight: true },
     { id: 'django', label: t.navDjangoExplorer, icon: Code2, highlight: true },
   ];
 
