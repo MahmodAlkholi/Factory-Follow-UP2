@@ -1,0 +1,6 @@
+{
+  "name": "FactoryPulse - Industrial Follow-up Dashboard & Django BI",
+  "description": "Real-time industrial manufacturing BI dashboard for tracking production, OEE, downtime Pareto, quality defects, and inventory with Arabic/English RTL support and complete Django 5 project architecture.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
